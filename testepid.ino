@@ -1,3 +1,7 @@
+kp = 0,2;
+kd = 0,2;
+error_passado = 0;
+
 while (true) {
 
     int leituraDireita = analogRead(REDIR);
@@ -6,17 +10,17 @@ while (true) {
     int err = leituraDireita - leituraEsquerda; // erro positivo -> robo a direita
     int d = err - error_passado;
     
-    float saidaEsquerda = 90 + vbase - err * kp - d*kd;
-    float saidaDireita = 90 - vbase - err * kp - d*kd;
+    float pwme = 90 + vbase + err * kp + d*kd;
+    float pwmd = 90 - vbase + err * kp + d*kd;
     
     Serial.print(err);
     Serial.print(",");    Serial.println(d);
 
-    servodf.write(saidaDireita);
-    servodt.write(saidaDireita);
+    servodf.write(pwmd);
+    servodt.write(pwmd);
 
-    servoef.write(saidaEsquerda);
-    servoet.write(saidaEsquerda);
+    servoef.write(pwme);
+    servoet.write(pwme);
 
 
   error_passado = err;
