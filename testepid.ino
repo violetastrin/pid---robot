@@ -1,24 +1,39 @@
-kp = 0,2;
-kd = 0,2;
-error_passado = 0;
+float kp;
+  float kd;
+  float error_passado;
+  int vbase = 20;
+  error_passado = 0;
 
-int leituraDireita = analogRead(REDIR);
-int leituraEsquerda = analogRead(RESQ);
+  while (1) {
+    kp = 0, 5;
+    kd = 0, 5;
 
-int err = leituraDireita - leituraEsquerda; // erro positivo -> robo a direita
-int d = err - error_passado;
+    int leituraDireita = (analogRead(sensor[3]) - 400); 
+    int leituraEsquerda = (analogRead(sensor[1]) - 400); 
 
-float pwme = 90 + vbase + err * kp + d*kd;
-float pwmd = 90 - vbase + err * kp + d*kd;
+    int err = leituraDireita - (leituraEsquerda);  // erro positivo -> robo a direita
+    int d = err - error_passado;
 
-Serial.print(err);
-Serial.print(",");    Serial.println(d);
+    float pwme = 90 + vbase + err * kp + d * kd;
+    float pwmd = 90 - vbase + err * kp + d * kd;
 
-servodf.write(pwmd);
-servodt.write(pwmd);
+    Serial.print(err);
+    Serial.print(",");
+    Serial.println(d);
 
-servoef.write(pwme);
-servoet.write(pwme);
+    // servoDir_f.write(pwmd);
+    // servoDir_t.write(pwmd);
+
+    // servoEsq_f.write(pwme);
+    // servoEsq_t.write(pwme);
 
 
-error_passado = err;
+    error_passado = err;
+
+    Serial.print(pwme);
+    Serial.print(" / ");
+    Serial.println(pwmd); 
+    Serial.print(leituraEsquerda);
+    Serial.print(" / ");
+    Serial.println(leituraDireita); 
+  }
